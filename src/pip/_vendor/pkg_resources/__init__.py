@@ -2140,7 +2140,11 @@ def _rebuild_mod_path(orig_path, package_name, module):
 
     if not isinstance(orig_path, list):
         # Is this behavior useful when module.__path__ is not a list?
-        return
+        try:
+            # When module.__path__ can become a list, make it a list
+            orig_path = list(orig_path)
+        except:
+            return
 
     orig_path.sort(key=position_in_sys_path)
     module.__path__[:] = [_normalize_cached(p) for p in orig_path]
